@@ -1,0 +1,31 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}User list{% endblock %}
+
+{% block body %}
+    {{ block("logged_status", "logged.html.twig") }}
+    <br/>
+    <h1 class="h3">User list</h1>
+    <table>
+        <thead>
+        <tr>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Roles</th>
+        </tr>
+        </thead>
+        <tbody>
+            {% for user in users %}
+                <tr>
+                    <td>{{ user.name|e }}</td>
+                    <td>{{ user.email|e }}</td>
+                    <td>
+                        {% for role in user.roles %}
+                            {{ role|split('_').1 }}
+                        {% endfor %}
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
