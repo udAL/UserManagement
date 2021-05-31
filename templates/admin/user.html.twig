@@ -1,0 +1,54 @@
+{% extends 'base.html.twig' %}
+
+{% set title = user.id ? 'User ' ~ user.email : 'New User' %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block body %}
+    <form method="post">
+        {% if error %}
+            <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+        {% endif %}
+
+        {{ block("logged_status", "logged.html.twig") }}
+
+        <h1 class="h3 mb-3 font-weight-normal">{{ title }}</h1>
+        <table>
+            <tr>
+                <td>
+                    <label for="inputEmail">Email</label>
+                </td>
+                <td>
+                    {% if user.id is null %}
+                        <input type="email" value="{{ user.email }}" name="email" id="inputEmail" class="form-control" autocomplete="email" required autofocus>
+                    {% else %}
+                        {{ user.email }}
+                    {% endif %}
+                </td>
+            </tr>
+            {% if user.id is null %}
+                <tr>
+                    <td>
+                        <label for="inputPassword">Password</label>
+                    </td>
+                    <td>
+                        <input type="password" name="password" placeholder="Modify" id="inputPassword" class="form-control" autocomplete="off" required>
+                    </td>
+                </tr>
+            {% endif %}
+            <tr>
+                <td>
+                    <label for="inputName">Name</label>
+                </td>
+                <td>
+                    <input type="text" value="{{ user.name }}" name="name" id="inputName" class="form-control" autocomplete="name" required>
+                </td>
+            </tr>
+        </table>
+        <br/>
+        <a href="{{ url('users') }}">Back</a>
+        <button class="btn btn-lg btn-primary" type="submit">
+            Save
+        </button>
+    </form>
+{% endblock %}

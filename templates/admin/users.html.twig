@@ -6,12 +6,14 @@
     {{ block("logged_status", "logged.html.twig") }}
     <br/>
     <h1 class="h3">User list</h1>
+    <div><a href="{{ url('user.new') }}">New</a></div>
     <table>
         <thead>
         <tr>
             <th>Name</th>
             <th>Email</th>
             <th>Roles</th>
+            <th></th>
         </tr>
         </thead>
         <tbody>
@@ -23,6 +25,12 @@
                         {% for role in user.roles %}
                             {{ role|split('_').1 }}
                         {% endfor %}
+                    </td>
+                    <td>
+                        <a href="{{ url('user.get', {'id': user.id} ) }}">Edit</a>
+                        {% if user.id != app.user.id %}
+                            <a href="{{ url('user.delete', {'id': user.id} ) }}">Remove</a>
+                        {% endif %}
                     </td>
                 </tr>
             {% endfor %}
