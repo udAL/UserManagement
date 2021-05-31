@@ -45,7 +45,8 @@ class UsersController extends AbstractController
     public function user_new(): Response
     {
         $user = new User();
-        return $this->render('admin/user.html.twig', ['user' => $user, 'error' => '']);
+        $available_roles = User::$available_roles;
+        return $this->render('admin/user.html.twig', ['user' => $user, 'available_roles' => $available_roles, 'error' => '']);
     }
 
     /**
@@ -54,11 +55,12 @@ class UsersController extends AbstractController
     public function user_get(int $id): Response
     {
         $user = $this->repository->find($id);
+        $available_roles = User::$available_roles;
         if (!$user) {
             throw $this->createNotFoundException('User not found: '.$id);
         }
         else {
-            return $this->render('admin/user.html.twig', ['user' => $user, 'error' => '']);
+            return $this->render('admin/user.html.twig', ['user' => $user, 'available_roles' => $available_roles, 'error' => '']);
         }
     }
 
@@ -104,6 +106,15 @@ class UsersController extends AbstractController
     private function user_save(User $user, array $data)
     {
         $user->setName($data['name']);
+        $accepted_roles = array();
+        foreach($data['roles'] as $role)
+        {
+            if(in_array($role, User::$available_roles))
+            {
+                $accepted_roles[] = $role;
+            }
+        }
+        $user->setRoles(array_unique($accepted_roles));
         $this->manager->persist($user);
         $this->manager->flush();
     }

@@ -44,6 +44,18 @@
                     <input type="text" value="{{ user.name }}" name="name" id="inputName" class="form-control" autocomplete="name" required>
                 </td>
             </tr>
+            <tr>
+                <td>
+                    <label for="inputName">Role</label>
+                </td>
+                <td>
+                    <select multiple="multiple" name="roles[]" id="inputRoles">
+                        {% for role in available_roles %}
+                            <option value="{{ role }}" {{ role in user.roles ? 'selected="selected"' }}>{{ role|split('_').1 }}</option>
+                        {% endfor %}
+                    </select>
+                </td>
+            </tr>
         </table>
         <br/>
         <a href="{{ url('users') }}">Back</a>

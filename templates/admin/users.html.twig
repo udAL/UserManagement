@@ -22,9 +22,17 @@
                     <td>{{ user.name|e }}</td>
                     <td>{{ user.email|e }}</td>
                     <td>
-                        {% for role in user.roles %}
-                            {{ role|split('_').1 }}
-                        {% endfor %}
+                        {% if 'ROLE_ADMIN' in user.roles %}
+                            ADMIN
+                        {% else %}
+                            {% set roles = '' %}
+                            {% for role in user.roles %}
+                                {% if role != 'ROLE_ADMIN' %}
+                                    {% set roles = roles ~ role|split('_').1 %}
+                                {% endif %}
+                            {% endfor %}
+                            {{ roles }}
+                        {% endif %}
                     </td>
                     <td>
                         <a href="{{ url('user.get', {'id': user.id} ) }}">Edit</a>
