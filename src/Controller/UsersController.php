@@ -106,7 +106,12 @@ class UsersController extends AbstractController
     private function user_save(User $user, array $data)
     {
         $user->setName($data['name']);
+
         $accepted_roles = array();
+        if(!isset($data['roles']) || !is_array($data['roles'])) {
+            $data['roles'] = array();
+        }
+
         foreach($data['roles'] as $role)
         {
             if(in_array($role, User::$available_roles))
