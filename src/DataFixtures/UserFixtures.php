@@ -11,6 +11,10 @@ class UserFixtures extends Fixture
 {
     private $passwordEncoder;
 
+    public const ADMIN_USER = 'admin-user';
+    public const USER1 = 'user1';
+    public const USER2 = 'user2';
+
     public function __construct(UserPasswordEncoderInterface $passwordEncoder)
     {
         $this->passwordEncoder = $passwordEncoder;
@@ -28,6 +32,7 @@ class UserFixtures extends Fixture
         ));
         $user->setRoles(array('ROLE_ADMIN'));
         $manager->persist($user);
+        $this->addReference(self::ADMIN_USER, $user);
 
         // Normal user 1
         $user = new User();
@@ -39,6 +44,7 @@ class UserFixtures extends Fixture
         ));
         $user->setRoles(array('ROLE_USER'));
         $manager->persist($user);
+        $this->addReference(self::USER1, $user);
 
         // Normal user 2
         $user = new User();
@@ -50,6 +56,7 @@ class UserFixtures extends Fixture
         ));
         $user->setRoles(array('ROLE_USER'));
         $manager->persist($user);
+        $this->addReference(self::USER2, $user);
 
         $manager->flush();
     }
