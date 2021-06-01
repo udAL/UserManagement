@@ -1,0 +1,55 @@
+{% extends 'base.html.twig' %}
+
+{% set title = group.id ? 'Group' : 'New Group' %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block body %}
+    <form method="post">
+        {% if error %}
+            <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData) }}</div>
+        {% endif %}
+
+        {{ block("logged_status", "logged.html.twig") }}
+
+        <h1 class="h3 mb-3 font-weight-normal">{{ title }}</h1>
+        <table>
+            <tr>
+                <td>
+                    <label for="selectUsers">Members</label>
+                </td>
+                <td>
+                    <select multiple="multiple" name="users[]" id="selectUsers">
+                        {% set user_ids = [] %}
+                        {% for user_ingroup in group.users %}
+                            {% set user_ids = user_ids|merge([user_ingroup.id]) %}
+                        {% endfor %}
+                        {% for user in users %}
+                            <option value="{{ user.id }}" {{ user.id in user_ids ? 'selected="selected"' }}>{{ user.name }}</option>
+                        {% endfor %}
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <button type="button" onclick="clearMembers()">Empty group</button>
+                    <script>
+                        function clearMembers()
+                        {
+                            let select = document.getElementById("selectUsers");
+                            let length = select.options.length;
+                            for (let i = length-1; i >= 0; i--) {
+                                select.options[i].selected = false;
+                            }
+                        }
+                    </script>
+                </td>
+            </tr>
+        </table>
+        <br/>
+        <a href="{{ url('groups') }}">Back</a>
+        <button class="btn btn-lg btn-primary" type="submit">
+            Save
+        </button>
+    </form>
+{% endblock %}
