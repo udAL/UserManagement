@@ -6,8 +6,14 @@
     {{ block("logged_status", "logged.html.twig") }}
     {% if 'ROLE_ADMIN' in app.user.roles %}
         <br/>
+        <label>Admin menu</label>
+        <br/>
         <a class="btn btn-lg btn-primary" href="{{ url('users') }}">
             User list
+        </a>
+        <br/>
+        <a class="btn btn-lg btn-primary" href="{{ url('groups') }}">
+            Group list
         </a>
     {% endif %}
 {% endblock %}

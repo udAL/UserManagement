@@ -1,0 +1,37 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Group list{% endblock %}
+
+{% block body %}
+    {{ block("logged_status", "logged.html.twig") }}
+    <br/>
+    <h1 class="h3">Group list</h1>
+    {% if groups %}
+        <table>
+            <thead>
+            <tr>
+                <th>Members</th>
+            </tr>
+            </thead>
+            <tbody>
+                {% for group in groups %}
+                    <tr>
+                        <td>
+                            {% if group.users|length %}
+                                {% set users = [] %}
+                                {% for user in group.users %}
+                                    {% set users = users|merge([user.name]) %}
+                                {% endfor %}
+                                {{ users|join(', ') }}
+                            {% else %}
+                                Empty group
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        No groups
+    {% endif %}
+{% endblock %}
