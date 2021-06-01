@@ -7,6 +7,7 @@
     <br/>
     <h1 class="h3">User list</h1>
     <div><a href="{{ url('user.new') }}">New</a></div>
+    <br/>
     <table>
         <thead>
         <tr>
@@ -44,4 +45,6 @@
             {% endfor %}
         </tbody>
     </table>
+    <br/>
+    <a href="{{ url('profile') }}">Back</a>
 {% endblock %}

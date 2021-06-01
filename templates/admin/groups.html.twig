@@ -7,6 +7,7 @@
     <br/>
     <h1 class="h3">Group list</h1>
     <div><a href="{{ url('group.new') }}">New</a></div>
+    <br/>
     {% if groups %}
         <table>
             <thead>
@@ -42,4 +43,6 @@
     {% else %}
         No groups
     {% endif %}
+    <br/>
+    <a href="{{ url('profile') }}">Back</a>
 {% endblock %}
