@@ -10,6 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * @ORM\Entity(repositoryClass=GroupRepository::class)
  * @ORM\Table(name="`group`")
+ * @ORM\HasLifecycleCallbacks()
  */
 class Group
 {
@@ -60,5 +61,15 @@ class Group
         }
 
         return $this;
+    }
+
+    /**
+     * @ORM\PreRemove()
+     */
+    public function preRemove(): void
+    {
+        if(!empty($this->users)) {
+            throw new \Exception('Group is not empty: ' . $this->id);
+        }
     }
 }

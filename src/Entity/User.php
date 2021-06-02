@@ -11,9 +11,12 @@ use Symfony\Component\Security\Core\User\UserInterface;
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
  * @ORM\Table(name="`user`")
+ * @ORM\HasLifecycleCallbacks()
  */
 class User implements UserInterface
 {
+    public const AVAILABLE_ROLES = ['ROLE_USER', 'ROLE_ADMIN'];
+
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
@@ -30,7 +33,6 @@ class User implements UserInterface
      * @ORM\Column(type="json")
      */
     private $roles = [];
-    static $available_roles = ['ROLE_USER', 'ROLE_ADMIN'];
 
     /**
      * @var string The hashed password
@@ -50,6 +52,7 @@ class User implements UserInterface
 
     public function __construct()
     {
+        $this->roles[] = 'ROLE_USER';
         $this->groups = new ArrayCollection();
     }
 
@@ -85,11 +88,7 @@ class User implements UserInterface
      */
     public function getRoles(): array
     {
-        $roles = $this->roles;
-        // guarantee every user at least has ROLE_USER
-        $roles[] = 'ROLE_USER';
-
-        return array_unique($roles);
+        return $this->roles;
     }
 
     public function setRoles(array $roles): self
@@ -168,5 +167,25 @@ class User implements UserInterface
         $this->groups->removeElement($group);
 
         return $this;
+    }
+
+    /**
+     * @ORM\PreFlush()
+     */
+    public function preFlush(): void
+    {
+        if( empty($this->roles) ) {
+            // Guarantee every user at least has one role
+            $this->roles[] = 'ROLE_USER';
+        }
+        else {
+            // Only allow available_roles
+            foreach($this->roles as $i => $role)
+            {
+                if(!in_array($role, self::AVAILABLE_ROLES)) {
+                    unset($this->roles[$i]);
+                }
+            }
+        }
     }
 }

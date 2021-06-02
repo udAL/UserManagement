@@ -133,13 +133,8 @@ class GroupsController extends AbstractController
                 'Group not found: ' . $id
             );
         } else {
-            if( sizeof($group->getUsers()) ) {
-                throw new \Exception('Group is not empty: ' . $id);
-            }
-            else {
-                $this->manager->remove($group);
-                $this->manager->flush();
-            }
+            $this->manager->remove($group);
+            $this->manager->flush();
         }
         return $this->redirectToRoute('groups');
     }
